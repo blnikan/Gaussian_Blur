@@ -28,11 +28,10 @@ def reSize(img_, save_): # reSize  pic (.jpg) and may save them
     
     resized_img_ = img_.resize((width, height), Image.ANTIALIAS)
     
-    if save_ == 0:
-        return resized_img_
-    else:
+    if save_ != 0:
         resized_img_.save("resized_img.jpg")
-        return resized_img_
+    return resized_img_
+
 
 
 #image_file = input("Input file name:\n")
@@ -40,13 +39,14 @@ im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
 im = reSize(im,0) #reSize pic
 im_res = im.copy() # create a copy of pic
 
-MAX_X = im.width
-MAX_Y = im.height
+SIZE_X = im.width
+SIZE_Y = im.height
 
-pix_r = 5#int(input("Input the blur radius:  "))
+pix_r = 5 #int(input("Input the blur radius:  "))
 sigma = 1.5#int(input("Input the Gaussian standard deviation:  "))
 
 box_offsets = [] #generates all offset combos
+
 
 for i in range(-pix_r,pix_r+1):
     
@@ -54,15 +54,16 @@ for i in range(-pix_r,pix_r+1):
         
         box_offsets.append((i,j))
 
-
+#create Weight matrix
 coeff = [gauss_func(sigma, x)*gauss_func(sigma, y) for x,y in box_offsets]
 
+a = input("pause")
 
 
 
-for x_val in range(MAX_X):
+for x_val in range(SIZE_X):
     
-    for y_val in range(MAX_Y):
+    for y_val in range(SIZE_Y):
         
         tot_r = 0
         tot_b = 0
@@ -70,10 +71,12 @@ for x_val in range(MAX_X):
         
         for idx, valies in enumerate(box_offsets):
             
-            if is_valid_pos(MAX_X, MAX_Y, x_val + valies[0], y_val + valies[1]):
+            ##### image border check
+            if is_valid_pos(SIZE_X, SIZE_Y, x_val + valies[0], y_val + valies[1]):
                 pixel_r, pixel_b, pixel_g = im.getpixel((x_val+valies[0],y_val+valies[1]))
             else:
                 pixel_r, pixel_b, pixel_g = im.getpixel((x_val,y_val))
+                
             tot_r += (pixel_r * coeff[idx])
             tot_b += (pixel_b * coeff[idx])
             tot_g += (pixel_g * coeff[idx])
