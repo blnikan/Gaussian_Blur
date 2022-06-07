@@ -17,7 +17,7 @@ def gauss_func(stdev, pos):
     return (1 / ( (2 * math.pi * stdev ** 2) ** 0.5 ) ) * math.e ** (-((pos ** 2)/(2  *stdev ** 2)))
 
 
-def is_valid_pos(max_width,max_height,pos_x,pos_y):
+def is_valid_pos(max_width,max_height,pos_x,pos_y): #position possibility (border check)
     return (0 < pos_x < max_width) and (0 < pos_y < max_height)
 
 
@@ -41,23 +41,21 @@ im_res = im.copy() # create a copy of pic
 
 SIZE_X = im.width
 SIZE_Y = im.height
-
-pix_r = 5 #int(input("Input the blur radius:  "))
-sigma = 1.5#int(input("Input the Gaussian standard deviation:  "))
+################## INPUT ##################
+pix_r = 5 
+sigma = 1.5
 
 box_offsets = [] #generates all offset combos
 
 
-for i in range(-pix_r,pix_r+1):
-    
+for i in range(-pix_r,pix_r+1): #generation of possible variations 
     for j in range(-pix_r,pix_r+1):
-        
         box_offsets.append((i,j))
 
 #create Weight matrix
 coeff = [gauss_func(sigma, x)*gauss_func(sigma, y) for x,y in box_offsets]
 
-a = input("pause")
+#a = input("pause")
 
 
 
@@ -65,22 +63,25 @@ for x_val in range(SIZE_X):
     
     for y_val in range(SIZE_Y):
         
-        tot_r = 0
-        tot_b = 0
-        tot_g = 0
+        res_r = 0
+        res_b = 0
+        res_g = 0
         
-        for idx, valies in enumerate(box_offsets):
+        i = 0
+        
+        for val in box_offsets:
             
-            ##### image border check
-            if is_valid_pos(SIZE_X, SIZE_Y, x_val + valies[0], y_val + valies[1]):
-                pixel_r, pixel_b, pixel_g = im.getpixel((x_val+valies[0],y_val+valies[1]))
+            if is_valid_pos(SIZE_X, SIZE_Y, x_val + val[0], y_val + val[1]):
+                pixel_r, pixel_b, pixel_g = im.getpixel((x_val + val[0], y_val + val[1]))
             else:
                 pixel_r, pixel_b, pixel_g = im.getpixel((x_val,y_val))
-                
-            tot_r += (pixel_r * coeff[idx])
-            tot_b += (pixel_b * coeff[idx])
-            tot_g += (pixel_g * coeff[idx])
-        im_res.putpixel((x_val,y_val),(int(tot_r),int(tot_b),int(tot_g)))
+            
+            res_r += (pixel_r * coeff[i])
+            res_b += (pixel_b * coeff[i])
+            res_g += (pixel_g * coeff[i])
+            i += 1
+            
+        im_res.putpixel((x_val,y_val),(int(res_r),int(res_b),int(res_g)))
 
 im_res.show()
 
