@@ -17,11 +17,11 @@ def gauss_func(stdev, pos):
     return (1 / ( (2 * math.pi * stdev ** 2) ** 0.5 ) ) * math.e ** (-((pos ** 2)/(2  *stdev ** 2)))
 
 
-def is_valid_pos(max_width,max_height,pos_x,pos_y): #position possibility (border check)
+def is_valid_pos(max_width,max_height,pos_x,pos_y): #TODO position possibility (border check)
     return (0 < pos_x < max_width) and (0 < pos_y < max_height)
 
 
-def reSize(img_, save_): # reSize  pic (.jpg) and may save them
+def reSize(img_, save_): #TODO reSize  pic (.jpg) and may save them
     
     width = img_.width // 3
     height = img_.height // 3
@@ -36,8 +36,8 @@ def reSize(img_, save_): # reSize  pic (.jpg) and may save them
 
 #image_file = input("Input file name:\n")
 im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
-im = reSize(im,0) #reSize pic
-im_res = im.copy() # create a copy of pic
+#im = reSize(im,0) #TODO resize the image to make  run faster 
+im_res = im.copy() #TODO create a copy of pic
 
 SIZE_X = im.width
 SIZE_Y = im.height
@@ -45,10 +45,10 @@ SIZE_Y = im.height
 pix_r = 5 
 sigma = 1.5
 
-box_offsets = [] #generates all offset combos
+box_offsets = [] #TODO generates all offset combos
 
 
-for i in range(-pix_r,pix_r+1): #generation of possible variations 
+for i in range(-pix_r,pix_r+1): #TODO generation of possible variations 
     for j in range(-pix_r,pix_r+1):
         box_offsets.append((i,j))
 
