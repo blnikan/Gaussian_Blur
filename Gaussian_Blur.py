@@ -10,8 +10,6 @@ Created on Fri Jun  3 11:03:20 2022
 import math
 from PIL import Image
 
-PI = math.pi
-E = math.e
 
 #https://www.pixelstech.net/article/1353768112-Gaussian-Blur-Algorithm
 
@@ -25,8 +23,8 @@ def is_valid_pos(max_width,max_height,pos_x,pos_y):
 
 def reSize(img_, save_): # reSize  pic (.jpg) and may save them
     
-    width = img_.width // 2
-    height = img_.height // 2
+    width = img_.width // 3
+    height = img_.height // 3
     
     resized_img_ = img_.resize((width, height), Image.ANTIALIAS)
     
@@ -82,4 +80,4 @@ for x_val in range(MAX_X):
         im_res.putpixel((x_val,y_val),(int(tot_r),int(tot_b),int(tot_g)))
 
 im_res.show()
-im_res.save("resized_img.jpg")
+
