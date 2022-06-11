@@ -1,7 +1,7 @@
 #!/bin/bash
 
 git add .
-git commit -m "ed"
+git commit -m "dr"
 git push
 
 echo "DONE"
