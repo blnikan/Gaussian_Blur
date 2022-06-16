@@ -46,58 +46,61 @@ def Weight_Matrix(sigma_):
     return res
     
 
-def preop(re_size_mx):
-    res = np.zeros(3)
-    
-    for ind_x in range(len(res)):
-        for ind_y in range(len(res)):
-            res[ind_x] += 1
-        
-    
-    return 0
+
 #^^^^^^^^^^^^^^^^^^^^^^^ FUNCTIONS ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 #------------------------ LOAD IMAGE ------------------------
-im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
-im = np.array(im)
-im_res =  np.zeros(im.shape)#im.copy()
+#im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
+#im = np.array(im)
+im = cv.imread('/home/nik/Documents/Gaussian_Blur/pic.jpg')[:,:,::-1]
+im_res =  np.zeros(im.shape)
+
+#------------------------ LOAD IMAGE ------------------------
+
 
 
 Weight_Matrix = Weight_Matrix(sigma)
+i = 1
+j = 1
+t_ = im[i-pix_r:i + 2*pix_r, j - pix_r : j + 2*pix_r,: ]
 
 
-rez_ = np.zeros(im.shape)
+#print(im.shape[0] - 1)
 
-
-for i in range(Weight_Matrix.shape[0]):
-    for j in range(Weight_Matrix.shape[1]):
-        rez_[:,:,:] += Weight_Matrix[i,j] * im[:,:,:]
-
-
-
-
-
-
-
-
-
- 
-
-
-#plt.imshow(im_res)    
-
-# А теперь в чем иедя. Для КАЖДОЙ точки надо взять ее соседей.
-# И показания по RGB  умножить на весовую матрицу (Weight_Matrix)
-# после чего полученное значение надо сложить непосредственно с центральным 
-# TODO 
-#
-#
-#
-#
-
-
-
+for i in range (1,im.shape[0] - 1):
+    #print(i)
+    for j in range (1,im.shape[1] - 1):
+        #print(i)
+        temp_small_im = im[i-pix_r:i + 2*pix_r, j - pix_r : j + 2*pix_r,: ]
+        #print(temp_small_im.shape)
+        
+        red_one =   np.dot(temp_small_im[:,:,0],Weight_Matrix   )
+        red_one = int(np.sum(red_one))
+        if red_one >255:
+            red_one =255
+        
+        green_one =   np.dot(temp_small_im[:,:,1],Weight_Matrix   )
+        green_one = int(np.sum(green_one))
+        if green_one >255:
+            green_one =255
+        
+        blue_one =   np.dot(temp_small_im[:,:,2],Weight_Matrix   )
+        blue_one = int(np.sum(blue_one))
+        if blue_one >255:
+            blue_one =255
+        
+        im_res[i,j,0] = red_one#int(np.sum(red_one))
+        im_res[i,j,1] =  blue_one #int(np.sum(green_one))
+        im_res[i,j,2] = green_one#int(np.sum(blue_one))
+        
+    
+    
+            
+        
+        #if j == 1:
+        #    print(temp_small_im)
+        #    break
 
 
 
@@ -105,6 +108,8 @@ for i in range(Weight_Matrix.shape[0]):
 
 #plt.subplot(121),plt.imshow(im)
 #plt.xticks([]), plt.yticks([])
-plt.subplot(122),plt.imshow(rez_)
-plt.xticks([]), plt.yticks([])
+#plt.subplot(122),plt.imshow(im_res)
+#plt.xticks([]), plt.yticks([])
+plt.figure(num= None, figsize=(10,10),dpi=80)
+plt.imshow(im_res)
 plt.show()
