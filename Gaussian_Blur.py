@@ -38,13 +38,13 @@ def reSize(img_, save_): #TODO reSize  pic (.jpg) and may save them
 #image_file = input("Input file name:\n")
 im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
 
-im = reSize(im,0) #TODO resize the image to make  run faster 
+#im = reSize(im,0) #TODO resize the image to make  run faster 
 im_res = im.copy() #TODO create a copy of pic
 
 SIZE_X = im.width
 SIZE_Y = im.height
 ################## INPUT ##################
-pix_r = 10 
+pix_r = 1 
 sigma = 1.5
 
 box_offsets = [] #TODO generates all offset combos
