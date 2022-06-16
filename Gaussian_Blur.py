@@ -9,6 +9,7 @@ Created on Fri Jun  3 11:03:20 2022
 
 import math
 from PIL import Image
+import numpy as np
 
 
 #https://www.pixelstech.net/article/1353768112-Gaussian-Blur-Algorithm
@@ -43,7 +44,7 @@ im_res = im.copy() #TODO create a copy of pic
 SIZE_X = im.width
 SIZE_Y = im.height
 ################## INPUT ##################
-pix_r = 3 
+pix_r = 10 
 sigma = 1.5
 
 box_offsets = [] #TODO generates all offset combos
@@ -85,6 +86,8 @@ for x_val in range(SIZE_X):
             
             
         im_res.putpixel((x_val,y_val),(int(res_r),int(res_b),int(res_g)))
+pre_im = np.array(im)
+end_im = np.array(im_res)
 
 im_res.show()
 

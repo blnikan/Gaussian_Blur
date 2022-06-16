@@ -12,8 +12,10 @@ import numpy as np
 import cv2 as cv
 
 #------------------------ CONSTS ------------------------
+
 pix_r = 1
 sigma = 1.5
+
 #------------------------ CONSTS ------------------------
 """
 
@@ -24,32 +26,66 @@ plt.imshow(I)
 plt.show()
 """
 
+#vvvvvvvvvvvvvvvvvvvvvvv  FUNCTIONS  vvvvvvvvvvvvvvvvvvvvvvv
 def gauss_func(sigma_, pos): # Gaussian function (sigma_ - sigma ; pos - coordinate  in Gaussian function)
     return (1 / ( (2 * np.pi * sigma_ ** 2) ** 0.5 ) ) * np.e ** (-((pos ** 2)/(2  * sigma_ ** 2)))
+
+def Weight_Matrix(sigma_):
+    
+    pos_x = np.array([[-1,0,1],
+                     [-1,0,1],
+                     [-1,0,1]],dtype= np.int32)
+
+    pos_y = np.array([[1,1,1],
+                     [0,0,0],
+                     [-1,-1,-1]],dtype= np.int32)
+
+
+    res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y)
+    
+    return res
+    
+
+def preop(re_size_mx):
+    res = np.zeros(3)
+    
+    for ind_x in range(len(res)):
+        for ind_y in range(len(res)):
+            res[ind_x] += 1
+        
+    
+    return 0
+#^^^^^^^^^^^^^^^^^^^^^^^ FUNCTIONS ^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 #------------------------ LOAD IMAGE ------------------------
 im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
 im = np.array(im)
-im_res = im.copy()
+im_res =  np.zeros(im.shape)#im.copy()
+
+
+Weight_Matrix = Weight_Matrix(sigma)
+
+
+rez_ = np.zeros(im.shape)
+
+
+for i in range(Weight_Matrix.shape[0]):
+    for j in range(Weight_Matrix.shape[1]):
+        rez_[:,:,:] += Weight_Matrix[i,j] * im[:,:,:]
 
 
 
 
 
-pos_x = np.array([[-1,0,1],
-                 [-1,0,1],
-                 [-1,0,1]],dtype= np.int32)
-
-pos_y = np.array([[1,1,1],
-                 [0,0,0],
-                 [-1,-1,-1]],dtype= np.int32)
-
-
-Weight_Matrix = gauss_func(sigma,pos_x) * gauss_func(sigma,pos_y)
 
 
 
-    
+
+ 
+
+
+#plt.imshow(im_res)    
 
 # А теперь в чем иедя. Для КАЖДОЙ точки надо взять ее соседей.
 # И показания по RGB  умножить на весовую матрицу (Weight_Matrix)
@@ -61,3 +97,14 @@ Weight_Matrix = gauss_func(sigma,pos_x) * gauss_func(sigma,pos_y)
 #
 
 
+
+
+
+
+#------------------------ OUTPUT ------------------------
+
+#plt.subplot(121),plt.imshow(im)
+#plt.xticks([]), plt.yticks([])
+plt.subplot(122),plt.imshow(rez_)
+plt.xticks([]), plt.yticks([])
+plt.show()
