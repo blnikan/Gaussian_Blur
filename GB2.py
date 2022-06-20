@@ -34,9 +34,9 @@ def Weight_Matrix_(sigma_, rad_):
         tepm_x += 1
     #print("pos_x\n",pos_x)
     #print('pos_y\n',pos_y)
-    res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y)
+    res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y) 
     
-    return res
+    return res / np.sum(res)
     
 def Weight_Matrix_1r(sigma_): #create weight matrix of radius = 1
     
@@ -62,6 +62,7 @@ im_res =  np.zeros(im.shape)
 #------------------------ LOAD IMAGE ------------------------
 #------------------------  ------------------------
 Weight_Matrix = Weight_Matrix_(sigma,pix_r)
+print(np.sum(Weight_Matrix))
 
 
 for i in range (pix_r,im.shape[0] - pix_r):
