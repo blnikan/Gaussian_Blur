@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import cv2 as cv
 #------------------------ CONSTS ------------------------
-pix_r = 3
+pix_r = 10
 sigma = 1.5
 #------------------------ CONSTS ------------------------
 #------------------------  FUNCTIONS  ------------------------
@@ -32,8 +32,8 @@ def Weight_Matrix_(sigma_, rad_):
             pos_y[i,j] = -1*tepm_x
                         
         tepm_x += 1
-    print("pos_x\n",pos_x)
-    print('pos_y\n',pos_y)
+    #print("pos_x\n",pos_x)
+    #print('pos_y\n',pos_y)
     res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y)
     
     return res
@@ -71,9 +71,15 @@ for i in range (pix_r,im.shape[0] - pix_r):
         #1-verde (green)
         #2-azul (blue)
 
+        #temp_small_im = im[i - pix_r : i + 2 * pix_r, j - pix_r : j + 2 * pix_r , : ]
 
-        temp_small_im = im[i - pix_r : i + 2 * pix_r, j - pix_r : j + 2 * pix_r , : ]
-        
+        temp_small_im = im[i - pix_r : i + 1 + pix_r, j - pix_r : j + 1 + pix_r , : ]
+        #print(i - pix_r)
+        #print(i +  pix_r)
+        #print('Weight_Matrix',Weight_Matrix.shape)
+        #print("temp_small_im",temp_small_im.shape)
+        #break
+    #break
         #red_one =  temp_small_im[:,:,0] * Weight_Matrix  
         #red_one = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix ))
         #green_one = temp_small_im[:,:,1] * Weight_Matrix 
@@ -107,8 +113,8 @@ plt.figure(num= None, figsize=(10,10),dpi=80)
 plt.imshow(im_res.astype(np.uint8))
 plt.show()
 
-#new_im = Image.fromarray(im_res.astype(np.uint8))
-#new_im.save('g.jpg')
+new_im = Image.fromarray(im_res.astype(np.uint8))
+new_im.save('g_10.jpg')
 
 
 #------------------------ OUTPUT ------------------------
