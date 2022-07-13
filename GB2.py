@@ -57,12 +57,14 @@ def Weight_Matrix_1r(sigma_): #create weight matrix of radius = 1
 #------------------------ LOAD IMAGE ------------------------
 #im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
 #im = np.array(im)
-im = cv.imread('/home/nik/Documents/Gaussian_Blur/pic.jpg')[:,:,::-1]
+im = cv.imread("/home/nik/Documents/robis/BICUBIC_INTERPOLATION/data/panorama.tif")[:,:,::-1]#cv.imread('/home/nik/Documents/Gaussian_Blur/pic.jpg')[:,:,::-1]
+#im = Image.open('/home/nik/Documents/robis/BICUBIC_INTERPOLATION/data/panorama.tif')
+im = np.array(im)
 im_res =  np.zeros(im.shape)
 #------------------------ LOAD IMAGE ------------------------
 #------------------------  ------------------------
 Weight_Matrix = Weight_Matrix_(sigma,pix_r)
-print(np.sum(Weight_Matrix))
+#print(np.sum(Weight_Matrix))
 
 
 for i in range (pix_r,im.shape[0] - pix_r):
@@ -115,7 +117,7 @@ plt.imshow(im_res.astype(np.uint8))
 plt.show()
 
 new_im = Image.fromarray(im_res.astype(np.uint8))
-new_im.save('g_10.jpg')
+new_im.save('g_panora.jpg')
 
 
 #------------------------ OUTPUT ------------------------
