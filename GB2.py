@@ -12,7 +12,7 @@ import numpy as np
 import cv2 as cv
 #------------------------ CONSTS ------------------------
 pix_r = 10
-sigma = 1.5
+sigma = 10
 #------------------------ CONSTS ------------------------
 #------------------------  FUNCTIONS  ------------------------
 
@@ -55,19 +55,18 @@ def Weight_Matrix_1r(sigma_): #create weight matrix of radius = 1
     
 #------------------------ FUNCTIONS ------------------------
 #------------------------ LOAD IMAGE ------------------------
-#im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.jpg')
-#im = np.array(im)
-im = cv.imread("/home/nik/Documents/robis/BICUBIC_INTERPOLATION/data/panorama.tif")[:,:,::-1]#cv.imread('/home/nik/Documents/Gaussian_Blur/pic.jpg')[:,:,::-1]
-#im = Image.open('/home/nik/Documents/robis/BICUBIC_INTERPOLATION/data/panorama.tif')
+im = Image.open('/home/nik/Documents/pic.png')
 im = np.array(im)
 im_res =  np.zeros(im.shape)
 #------------------------ LOAD IMAGE ------------------------
 #------------------------  ------------------------
 Weight_Matrix = Weight_Matrix_(sigma,pix_r)
-#print(np.sum(Weight_Matrix))
+print('sum of Weight_Matrix = ',np.sum(Weight_Matrix))
+#a = input('pause')
 
 
 for i in range (pix_r,im.shape[0] - pix_r):
+    print(f'i: {i} from im.shape[0] - pix_r')
 
     for j in range (pix_r,im.shape[1] - pix_r):
         #0-rojo (red)
@@ -104,34 +103,11 @@ for i in range (pix_r,im.shape[0] - pix_r):
 
 
 #------------------------  ------------------------
+
+
 #------------------------ OUTPUT ------------------------
-#plt.subplot(121),plt.imshow(im)
-#plt.xticks([]), plt.yticks([])
-#plt.subplot(122),plt.imshow(im_res)
-#plt.xticks([]), plt.yticks([])
-
-#plt.figure(num= None, figsize=(10,10),dpi=80)
-#plt.imshow(im.astype(np.uint8))
-plt.figure(num= None, figsize=(10,10),dpi=80)
-plt.imshow(im_res.astype(np.uint8))
-plt.show()
-
 new_im = Image.fromarray(im_res.astype(np.uint8))
-new_im.save('g_panora.jpg')
+new_im.save('/home/nik/Documents/Gaussian_Blur/pic.tif')
 
 
 #------------------------ OUTPUT ------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
