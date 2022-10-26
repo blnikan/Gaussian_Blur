@@ -11,8 +11,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 import cv2 as cv
 #------------------------ CONSTS ------------------------
-pix_r = 10
-sigma = 10
+pix_r = 5
+sigma = 3
 #------------------------ CONSTS ------------------------
 #------------------------  FUNCTIONS  ------------------------
 
@@ -37,19 +37,26 @@ def Weight_Matrix_(sigma_, rad_):
     res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y) 
     
     return res / np.sum(res)
+def padding(img,rad_):
+    H = img.shape[0]
+    W = img.shape[1]
+    C = 3
     
-def Weight_Matrix_1r(sigma_): #create weight matrix of radius = 1
+    res = np.zeros((H+rad_*2,W+rad_*2,C))
+    res[rad_:H+rad_, rad_:W+rad_] = img
     
-    pos_x = np.array([[-1,0,1],
-                     [-1,0,1],
-                     [-1,0,1]],dtype= np.int32)
-
-    pos_y = np.array([[1,1,1],
-                     [0,0,0],
-                     [-1,-1,-1]],dtype= np.int32)
-
+    #Pad the first/last two col and row
+    res[rad_:H+rad_,0:rad_,:C]=img[:,0:1,:C]
+    res[H+rad_:H+rad_*2,rad_:W+rad_,:]=img[H-1:H,:,:]
+    res[rad_:H+rad_,W+rad_:W+rad_*2,:]=img[:,W-1:W,:]
+    res[0:rad_,rad_:W+rad_,:C]=img[0:1,:,:C]
     
-    res = gauss_func(sigma_,pos_x) * gauss_func(sigma_,pos_y)
+    #Pad the missing eight points
+    res[0:rad_,0:rad_,:C]=img[0,0,:C]
+    res[H+rad_:H+rad_*2,0:rad_,:C]=img[H-1,0,:C]
+    res[H+rad_:H+rad_*2,W+rad_:W+rad_*2,:C]=img[H-1,W-1,:C]
+    res[0:rad_,W+rad_:W+rad_*2,:C]=img[0,W-1,:C]
+    
     
     return res
     
@@ -57,9 +64,17 @@ def Weight_Matrix_1r(sigma_): #create weight matrix of radius = 1
 #------------------------ LOAD IMAGE ------------------------
 im = Image.open('/home/nik/Documents/pic.png')
 im = np.array(im)
+
+H = im.shape[0]
+W = im.shape[1]
+
+im = padding(im,pix_r)
+
 im_res =  np.zeros(im.shape)
+
 #------------------------ LOAD IMAGE ------------------------
-#------------------------  ------------------------
+
+#------------------------------------------------
 Weight_Matrix = Weight_Matrix_(sigma,pix_r)
 print('sum of Weight_Matrix = ',np.sum(Weight_Matrix))
 #a = input('pause')
@@ -73,40 +88,14 @@ for i in range (pix_r,im.shape[0] - pix_r):
         #1-verde (green)
         #2-azul (blue)
 
-        #temp_small_im = im[i - pix_r : i + 2 * pix_r, j - pix_r : j + 2 * pix_r , : ]
-
         temp_small_im = im[i - pix_r : i + 1 + pix_r, j - pix_r : j + 1 + pix_r , : ]
-        #print(i - pix_r)
-        #print(i +  pix_r)
-        #print('Weight_Matrix',Weight_Matrix.shape)
-        #print("temp_small_im",temp_small_im.shape)
-        #break
-    #break
-        #red_one =  temp_small_im[:,:,0] * Weight_Matrix  
-        #red_one = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix ))
-        #green_one = temp_small_im[:,:,1] * Weight_Matrix 
-        #green_one = int(np.sum(temp_small_im[:,:,1] * Weight_Matrix ))
-        #blue_one =  temp_small_im[:,:,2] * Weight_Matrix 
-        #blue_one = int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
-        
-        #if red_one >= 255:
-        #    red_one = 254
-        #if green_one >= 255:
-        #    green_one = 254
-        #if blue_one >= 255:
-        #    blue_one = 254
-        
-        
-        
         im_res[i,j,0],im_res[i,j,1],im_res[i,j,2] = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,1] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
 
-
-
-#------------------------  ------------------------
+#------------------------------------------------
 
 
 #------------------------ OUTPUT ------------------------
-new_im = Image.fromarray(im_res.astype(np.uint8))
+new_im = Image.fromarray(im_res[pix_r:H+pix_r, pix_r:W+pix_r].astype(np.uint8))
 new_im.save('/home/nik/Documents/Gaussian_Blur/pic.tif')
 
 

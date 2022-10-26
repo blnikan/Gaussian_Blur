@@ -61,23 +61,23 @@ def padding(img,rad_):
     W = img.shape[1]
     C = 3
     
-    zimg = np.zeros((H+rad_*2,W+rad_*2,C))
-    zimg[rad_:H+rad_, rad_:W+rad_] = img
+    res = np.zeros((H+rad_*2,W+rad_*2,C))
+    res[rad_:H+rad_, rad_:W+rad_] = img
     
     #Pad the first/last two col and row
-    zimg[rad_:H+rad_,0:rad_,:C]=img[:,0:1,:C]
-    zimg[H+rad_:H+rad_*2,rad_:W+rad_,:]=img[H-1:H,:,:]
-    zimg[rad_:H+rad_,W+rad_:W+rad_*2,:]=img[:,W-1:W,:]
-    zimg[0:rad_,rad_:W+rad_,:C]=img[0:1,:,:C]
+    res[rad_:H+rad_,0:rad_,:C]=img[:,0:1,:C]
+    res[H+rad_:H+rad_*2,rad_:W+rad_,:]=img[H-1:H,:,:]
+    res[rad_:H+rad_,W+rad_:W+rad_*2,:]=img[:,W-1:W,:]
+    res[0:rad_,rad_:W+rad_,:C]=img[0:1,:,:C]
     
     #Pad the missing eight points
-    zimg[0:rad_,0:rad_,:C]=img[0,0,:C]
-    zimg[H+rad_:H+rad_*2,0:rad_,:C]=img[H-1,0,:C]
-    zimg[H+rad_:H+rad_*2,W+rad_:W+rad_*2,:C]=img[H-1,W-1,:C]
-    zimg[0:rad_,W+rad_:W+rad_*2,:C]=img[0,W-1,:C]
+    res[0:rad_,0:rad_,:C]=img[0,0,:C]
+    res[H+rad_:H+rad_*2,0:rad_,:C]=img[H-1,0,:C]
+    res[H+rad_:H+rad_*2,W+rad_:W+rad_*2,:C]=img[H-1,W-1,:C]
+    res[0:rad_,W+rad_:W+rad_*2,:C]=img[0,W-1,:C]
     
     
-    return zimg
+    return res
 
 
 def GauB_1pix(img,i_,j_,rad,sig):
