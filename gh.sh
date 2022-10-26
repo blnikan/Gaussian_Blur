@@ -1,7 +1,7 @@
 #!/bin/bash
 
 git add .
-git commit -m "dr"
+git commit -m "readme"
 git push
 
 echo "DONE"
