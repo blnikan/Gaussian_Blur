@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 25 13:27:11 2022
+Created on Wed Oct 26 13:08:45 2022
 
 @author: nik
 @author git: https://github.com/blnikan
 
 """
-from PIL import Image
-from matplotlib import pyplot as plt
+
 import numpy as np
-import cv2 as cv
+import cv2 
+import dlib
+import face_recognition
 
-#------------------------  FUNCTIONS  ------------------------
 
-def gauss_func(sigma_, pos): # Gaussian function (sigma_ - sigma ; pos - coordinate  in Gaussian function)
+def gauss_func(sigma_, pos): 
     return (1 / ( (2 * np.pi * sigma_ ** 2) ** 0.5 ) ) * np.e ** (-((pos ** 2)/(2  * sigma_ ** 2)))
 
 def Weight_Matrix_(sigma_, rad_):
@@ -89,108 +89,3 @@ def GauB(img,rad,sig):
 
 def dec(i0,j0,i1,j1):
     return ( (i0-i1)**2 + (j0-j1)**2 )**0.5
-
-    
-#------------------------ FUNCTIONS ------------------------
-#------------------------ LOAD IMAGE ------------------------
-pix_r = 3
-pix_r_MAX = 20
-sigma = 7
-
-im = Image.open('/home/nik/Documents/Gaussian_Blur/pic.png')  # /home/nik/Documents/vich_prakt/polar coordinates
-#im = Image.open('/home/nik/Documents/vich_prakt/polar coordinates/pic_color.jpg')
-#im = Image.open('/home/nik/Desktop/test.tif')  # /home/nik/Documents/vich_prakt/polar coordinates
-
-im = np.array(im)
-
-H = im.shape[0]
-W = im.shape[1]
-
-im = padding(im,pix_r_MAX)
-
-#temp_im = Image.fromarray(im.astype(np.uint8))
-#temp_im.show()
-#pause= input('pause')
-
-
-im_res = np.zeros(im.shape)
-
-r_Circle = 20
-
-poin_i_0_of_cir = im.shape[0] // 2
- 
-poin_j_0_of_cir = im.shape[1] // 2
-
-
-for i in range(pix_r_MAX ,im.shape[0]-pix_r_MAX):
-    
-    print(i, ' ---from--- ',im.shape[0]-pix_r_MAX)
-    
-    for j in range(pix_r_MAX,im.shape[1]-pix_r_MAX):
-        
-        temp_dec = dec(poin_i_0_of_cir,poin_j_0_of_cir,i,j)
-        
-        if temp_dec > r_Circle:
-            
-            temp_r = int(abs(temp_dec  - r_Circle) / 4 ) + 2
-            
-            if temp_r > pix_r_MAX:
-                temp_r = pix_r_MAX
-            
-            #im_res[i,j,0],im_res[i,j,1],im_res[i,j,2] =GauB_1pix(im,i,j,temp_r,sigma)
-            temp_small_im = im[i - temp_r : i + 1 + temp_r, j - temp_r : j + 1 + temp_r , : ]
-            
-            Weight_Matrix = Weight_Matrix_(sigma,temp_r)
-
-            im_res[i,j,0],im_res[i,j,1],im_res[i,j,2] = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,1] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
-        else:
-            im_res[i,j] = im[i,j]
-            
-            
-        
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#------------------------ OUTPUT ------------------------
-new_im = Image.fromarray(im_res[pix_r_MAX:H+pix_r_MAX, pix_r_MAX:W+pix_r_MAX].astype(np.uint8))
-new_im.save('/home/nik/Documents/Gaussian_Blur/pic_res.jpg')
-
-
-#------------------------ OUTPUT ------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
