@@ -93,7 +93,7 @@ def dec(i0,j0,i1,j1):
 
 
 
-im = cv2.imread('/home/nik/Documents/Untitled.png', cv2.COLOR_BGR2RGB)
+im = cv2.imread('/home/baby/Pictures/Screenshots/1.png', cv2.COLOR_BGR2RGB)
 
 pix_r = 3
 pix_r_MAX = 20
@@ -103,6 +103,8 @@ sigma = 7
 face_locations = face_recognition.face_locations(im)
 
 print(f'face_locations {face_locations}')
+
+a = input('pause')
 
 top    = face_locations[0][0]
 right  = face_locations[0][1]
@@ -153,4 +155,4 @@ for i in range(pix_r_MAX ,im.shape[0]-pix_r_MAX ):
         else:
             im_res[i,j] = im[i,j]
 
-cv2.imwrite('/home/nik/Documents/Gaussian_Blur/Torvalds3.jpg', im_res)  
+cv2.imwrite('/home/baby/Documents/Gaussian_Blur/Torvalds3.jpg', im_res[pix_r_MAX:H+pix_r_MAX, pix_r_MAX:W+pix_r_MAX])  
