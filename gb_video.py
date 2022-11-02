@@ -57,9 +57,10 @@ def padding(img,rad_):
     return res
 
 
-vid = cv2.VideoCapture('/home/nik/Documents/Gaussian_Blur/Israel.MP4')
+vid = cv2.VideoCapture('/home/nik/Documents/Gaussian_Blur/lin.mp4')
 
 pix_r = 7
+pix_r_MAX = pix_r
 sigma = 3
 
 if (vid.isOpened()== False): 
@@ -69,7 +70,7 @@ frames = []
 
 cou = 0
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480))
+out = cv2.VideoWriter('/home/nik/Documents/Gaussian_Blur/lin_out.avi',fourcc, 20.0, (600,600))
 
 while(vid.isOpened()):
     ret, frame = vid.read()
@@ -80,39 +81,39 @@ while(vid.isOpened()):
         H = frame.shape[0]
         W = frame.shape[1]
 
-        im = padding(frame,pix_r)
+        frame = padding(frame,pix_r)
         
-        im_res =  np.zeros(im.shape)
+        im_res =  np.zeros(frame.shape)
         
         Weight_Matrix = Weight_Matrix_(sigma,pix_r)
         
-        for i in range (pix_r,im.shape[0] - pix_r):
+        for i in range (pix_r,frame.shape[0] - pix_r-1):
             #print(f'i: {i} from im.shape[0] - pix_r')
 
-            for j in range (pix_r,im.shape[1] - pix_r):
+            for j in range (pix_r,frame.shape[1] - pix_r-1):
+                #print(f'j---{j}')
                 #0-rojo (red)
                 #1-verde (green)
                 #2-azul (blue)
 
-                temp_small_im = im[i - pix_r : i + 1 + pix_r, j - pix_r : j + 1 + pix_r , : ]
-                im_res[i,j,0],im_res[i,j,1],im_res[i,j,2] = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,1] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
+                temp_small_im = frame[i - pix_r : i + 1 + pix_r, j - pix_r : j + 1 + pix_r , : ]
+                frame[i,j,0],frame[i,j,1],frame[i,j,2] = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,1] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
 
-        #frame = im_res
-        out.write(im_res[])
+        #frame = np.dtype(frame,np.uint8)        
+
+        out.write(frame.astype(np.uint8))
         frames.append(frame)
         
-        #cv2.imshow('Frame',frame)
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
         	
             break
-        
-        if cou == 10:
-            break
+
 
 
 # When everything done, release the video capture object
 vid.release()
- 
+out.release()
+
 # Closes all the frames
 cv2.destroyAllWindows()
