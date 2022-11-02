@@ -57,7 +57,7 @@ def padding(img,rad_):
     return res
 
 
-vid = cv2.VideoCapture('/home/nik/Documents/Gaussian_Blur/lin.mp4')
+vid = cv2.VideoCapture('D:\\lin.mp4')
 
 pix_r = 7
 pix_r_MAX = pix_r
@@ -70,7 +70,7 @@ frames = []
 
 cou = 0
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('/home/nik/Documents/Gaussian_Blur/lin_out.avi',fourcc, 20.0, (600,600))
+out = cv2.VideoWriter('D:\\lin_out.avi',fourcc, 20.0, (600,600))
 
 while(vid.isOpened()):
     ret, frame = vid.read()
@@ -108,7 +108,7 @@ while(vid.isOpened()):
         if cv2.waitKey(1) & 0xFF == ord('q'):
         	
             break
-
+        
 
 
 # When everything done, release the video capture object
