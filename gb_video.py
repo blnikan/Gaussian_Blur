@@ -37,8 +37,6 @@ def Weight_Matrix_xz(sigma_, rad_):#???
     return res / np.sum(res)
 
 
-
-
 def padding(img,rad_):
     
     H = img.shape[0]
@@ -146,17 +144,16 @@ def sea_zone(img1, img2,r_,Weight_Matrix_,dead):
     return img2
     
     
-    
-    
-    
-vid = cv2.VideoCapture('Z:\\lin_1.mp4')
+
+
+vid = cv2.VideoCapture('D:\\Nikitatempcarpeta\\lin.mp4')
 
 pix_r = 7
 pix_r_MAX = 14#pix_r
 sigma = 3
 
 if (vid.isOpened()== False): 
-  print("Error opening video stream or file")
+  print("Error opening video stream or filee")
 
 frames = []   
 
@@ -169,53 +166,55 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 #fourcc = cv2.VideoWriter_fourcc(*"avc1")
 
-out = cv2.VideoWriter('Z:\\lin_res_n_1.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 30, (352,480))
+out = cv2.VideoWriter("D:\\Nikitatempcarpeta\\lin_res_n_1_new.mp4",cv2.VideoWriter_fourcc(*'mp4v'), 30, (352,480))
 
 while(vid.isOpened()):
-    
+   
     ret, frame = vid.read()
-    
+   
     if ret:
-        
+       
         print(cou)
-        out.write(frame.astype(np.uint8))
-        """
-        if cou > 500:
+        #out.write(frame.astype(np.uint8))
+        
+        if cou > 1190:
             out.write(frame.astype(np.uint8))
         elif cou % 3 == 0:
-            
-        
+           
+       
              
             H = frame.shape[0]
             W = frame.shape[1]
-    
+   
             frame = padding(frame,pix_r)
-            
+           
             im_res =  np.zeros(frame.shape)
-            
+           
             Weight_Matrix = Weight_Matrix_xz(sigma,pix_r)
-            
+           
             for i in range (pix_r,frame.shape[0] - pix_r-1):
                 #print(f'i: {i} from im.shape[0] - pix_r')
-    
+   
                 for j in range (pix_r,frame.shape[1] - pix_r-1):
                     #print(f'j---{j}')
                     #0-rojo (red)
                     #1-verde (green)
                     #2-azul (blue)
-    
+   
                     temp_small_im = frame[i - pix_r : i + 1 + pix_r, j - pix_r : j + 1 + pix_r , : ]
                     frame[i,j,0],frame[i,j,1],frame[i,j,2] = int(np.sum(temp_small_im[:,:,0] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,1] * Weight_Matrix )),int(np.sum(temp_small_im[:,:,2] * Weight_Matrix ))
-        """    
-        cou+=1
-       
+           
         
+       
+       
         out.write(frame.astype(np.uint8))
+        
+        cou+=1
         frames.append(frame)
     else:
         break
-        
-        
+       
+       
 
 
 # When everything done, release the video capture object
